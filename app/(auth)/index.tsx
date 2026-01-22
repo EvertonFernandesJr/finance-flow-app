@@ -32,6 +32,7 @@ export default function Index() {
         return;
       }
       Alert.alert("Sucesso", "Login realizado!");
+      router.navigate("/(tabs)");
     } catch (error: any) {
       console.error("Login error:", error);
       Alert.alert("Erro", error?.message || "Algo deu errado");

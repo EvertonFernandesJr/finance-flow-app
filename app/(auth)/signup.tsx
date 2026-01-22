@@ -34,6 +34,7 @@ export default function Index() {
         return;
       }
       Alert.alert("Sucesso", "Conta criada! Verifique email");
+      router.navigate("/(tabs)");
     } catch (error: any) {
       console.error("SignUp error:", error);
       Alert.alert("Erro", error?.message || "Algo deu errado");
@@ -69,7 +70,10 @@ export default function Index() {
         <Text>{loading ? "Carregando..." : "Criar Conta"}</Text>
       </TouchableOpacity>
       <Text style={styles.text2}>Possui uma conta?</Text>
-      <TouchableOpacity style={styles.button} onPress={() => router.back()}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.navigate("/")}
+      >
         <Text>Ir para Login</Text>
       </TouchableOpacity>
     </View>
