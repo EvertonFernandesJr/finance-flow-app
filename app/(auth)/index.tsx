@@ -1,43 +1,22 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-  Alert,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { supabase } from "../supabase/client";
 
 export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (!email || !password) {
       alert("preencha todos os campos");
       return;
-    }
-    setLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        Alert.alert("Erro", error.message);
-        return;
-      }
-      Alert.alert("Sucesso", "Login realizado!");
-      router.navigate("/(tabs)");
-    } catch (error: any) {
-      console.error("Login error:", error);
-      Alert.alert("Erro", error?.message || "Algo deu errado");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -50,7 +29,6 @@ export default function Index() {
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        editable={!loading}
       />
       <TextInput
         style={styles.input}
@@ -58,14 +36,9 @@ export default function Index() {
         onChangeText={setPassword}
         placeholder="Password"
         secureTextEntry
-        editable={!loading}
       />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleLogin}
-        disabled={loading}
-      >
-        <Text>{loading ? "Carregando..." : "Login "}</Text>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text>{"Login"}</Text>
       </TouchableOpacity>
       <Text style={styles.text2}>Não tem uma conta?</Text>
       <TouchableOpacity
