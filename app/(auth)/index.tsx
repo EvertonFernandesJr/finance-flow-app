@@ -1,6 +1,9 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
+
 import {
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -18,36 +21,36 @@ export default function Index() {
       alert("preencha todos os campos");
       return;
     }
+    alert("Login realizado!");
   };
 
   return (
-    <View style={styles.view}>
-      <Text style={styles.text}>Login</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <View style={styles.view}>
+        <Text style={styles.text}>Login</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Password"
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text>{"Login"}</Text>
-      </TouchableOpacity>
-      <Text style={styles.text2}>Não tem uma conta?</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.navigate("/signup")}
-      >
-        <Text>Ir para Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          returnKeyType="done"
+        />
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Password"
+          secureTextEntry
+          returnKeyType="done"
+        />
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text>{"Login"}</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
