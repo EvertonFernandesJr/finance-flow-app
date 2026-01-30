@@ -26,6 +26,7 @@ export default function Index() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.kview}
     >
       <View style={styles.view}>
         <Text style={styles.text}>Login</Text>
@@ -65,8 +66,6 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "black",
-    alignItems: "center",
-    justifyContent: "center",
     margin: 5,
     width: "80%",
     borderRadius: 10,
@@ -85,5 +84,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: 5,
     borderRadius: 10,
+  },
+  kview: {
+    flex: 1,
   },
 });
