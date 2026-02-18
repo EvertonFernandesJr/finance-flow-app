@@ -1,55 +1,46 @@
-import { Colors } from "@/shared/constants/Theme";
 import { authStyles } from "@/shared/styles/auth-styles";
 import { ThemedText } from "@/shared/themes/themed-text";
 import { ThemedView } from "@/shared/themes/themed-view";
+import { useAuth } from "@/ui/auth/vm/useAuth";
 import Button from "@/ui/shared/components/Button";
 import { ThemedInputForm } from "@/ui/shared/components/input/themedInputForm";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
-  useColorScheme,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { z } from "zod";
-import { useAuth } from "../vm/useAuth";
+
+import React, { useState } from "react";
+import { useColorScheme } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const schema = z.object({
   email: z
     .string({
-      error: "O email é obrigatório!",
+      error: "O email é obrigatório",
     })
-    .nonempty("O email é obrigatório!"),
-  password: z
-    .string({
-      error: "A senha é obrigatória!",
-    })
-    .nonempty("A senha é obrigatória!")
-    .min(6, "A senha deve ter pelo menos 6 caracteres!"),
+    .nonempty("O email é obrigatório"),
 });
 
-export const LoginView = () => {
-  const { signIn } = useAuth();
+export const ForgotPasswordView = () => {
+  const { resetPassword } = useAuth();
   const [isLoading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme ?? "light";
   const { control, handleSubmit, formState } = useForm({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (formData: { email: string; password: string }) => {
-    const { email, password } = formData;
+  const onSubmit = async (data: { email: string }) => {
+    const { email } = data;
 
-    await signIn(email, password);
     try {
       setLoading(true);
-      await signIn(email, password);
+      await resetPassword(email);
     } finally {
       setLoading(false);
     }
@@ -69,8 +60,11 @@ export const LoginView = () => {
           }}
         >
           <View style={authStyles.header}>
-            <ThemedText type="title">FinanceFlow</ThemedText>
-            <ThemedText type="subtitle">Faça Login para acessar</ThemedText>
+            <ThemedText type="title">Lembrar senha</ThemedText>
+            <ThemedText type="subtitle">
+              Complete o campo abaixo para receber o link de recureração no seu
+              email
+            </ThemedText>
           </View>
 
           <View style={authStyles.form}>
@@ -82,35 +76,17 @@ export const LoginView = () => {
               keyboardType="email-address"
               autoCapitalize="none"
             />
-            <ThemedInputForm
-              control={control}
-              name="password"
-              label="Senha"
-              placeholder="Digite sua senha"
-              secureTextEntry={!showPassword}
-              error={formState?.errors.password?.message}
-              rightElement={
-                <TouchableOpacity
-                  style={authStyles.eyeButton}
-                  onPress={() => setShowPassword(prev => !prev)}
-                >
-                  <AntDesign
-                    name={showPassword ? "eye" : "eye-invisible"}
-                    size={20}
-                    color={Colors[theme].icon}
-                  />
-                </TouchableOpacity>
-              }
-            />
+
             <TouchableOpacity
               style={authStyles.link}
-              onPress={() => router.replace("/(auth)/forgot-password")}
+              onPress={() => router.replace("/(auth)/login")}
             >
-              <ThemedText type="link">Esqueceu a senha?</ThemedText>
+              <ThemedText type="link">Login</ThemedText>
             </TouchableOpacity>
+
             <Button
               isLoading={isLoading}
-              title="Login"
+              title="Enviar"
               onPress={handleSubmit(onSubmit)}
             ></Button>
           </View>
